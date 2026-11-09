@@ -54,38 +54,53 @@ function Del (textElem) {
 
 function ElemClicked (elem, displayElem) {
     let val = elem.value;
-    displayElem.innerText = displayElem.innerText + String(val);
+    if (displayElem.innerText == "0") {
+        displayElem.innerText = String(val);
+    } else {
+        displayElem.innerText = displayElem.innerText + String(val);
+    }
 }
 
 function Calculate (displayElem, opList) {
     // check if equation is complete
     let equation = displayElem.innerText;
-    // get part lambda
+
     let partOne = "";
     let partTwo = "";
     let operator = "";
     let found = false;
-    // i was here
     for (const c of equation) {
         if (!found) {
-            opList.forEach(op => {
-                if (c === op) {
-                    operator = op;
+            if (opList.includes(c)) {
+                    operator = c;
                     found = true;
-                }
-            });
-            partOne += c;
+            } else {
+                partOne += c;
+            }
         } else {
             partTwo += c;
         }
     }
-    partOne = partOne.slice(0, -1);
+    if (partTwo.length === 0 || operator.length === 0) {
+        displayElem.innerText = partOne;
+        return;
+    }
     switch (operator) {
         case '+':
             displayElem.innerText = Number(partOne) + Number(partTwo);
             break;
         case '-':
             displayElem.innerText = Number(partOne) - Number(partTwo);
+            break;
+        case '*':
+            displayElem.innerText = Number(partOne) * Number(partTwo);
+            break;
+        case '/':
+            if (partTwo !== "0") {
+                displayElem.innerText = Number(partOne) / Number(partTwo);
+            } else {
+                displayElem.innerText = "Division by zero Error";
+            }
             break;
         default:
             displayElem.innerText = "Math Error";
