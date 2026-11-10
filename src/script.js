@@ -1,7 +1,7 @@
 document.addEventListener("DOMContentLoaded", () => {
 
 let opCount = 0;
-const opList = [ "+", "-" ];
+const opList = [ "+", "-", "/", "*"];
 
 // text elems
 const displayText = document.getElementsByClassName("display-text")[0];
@@ -16,16 +16,16 @@ const solve = document.querySelector(".solve");
 numbers.forEach(number => {
     number.addEventListener("click", () => {
         ElemClicked(number, displayText); 
-    })
+    });
 });
 operators.forEach(op => {
     op.addEventListener("click", () => {
-        if (opCount <= 0) {
+        if (opCount <= 0 && displayText.innerText !== "0") {
             ElemClicked(op, displayText);
             opCount = 1;
         }
-    })
-})
+    });
+});
 
 btnAC.addEventListener("click", () => { displayText.innerText = "0"; opCount = 0; });
 btnDEL.addEventListener("click", () => { 
@@ -62,7 +62,6 @@ function ElemClicked (elem, displayElem) {
 }
 
 function Calculate (displayElem, opList) {
-    // check if equation is complete
     let equation = displayElem.innerText;
 
     let partOne = "";
@@ -81,6 +80,7 @@ function Calculate (displayElem, opList) {
             partTwo += c;
         }
     }
+    //checks if eauation is complete
     if (partTwo.length === 0 || operator.length === 0) {
         displayElem.innerText = partOne;
         return;
